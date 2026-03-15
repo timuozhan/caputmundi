@@ -35,56 +35,89 @@ body {
 }
 
 /* ═══ PASSWORD SCREEN ═══ */
+@keyframes pwFadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
 #password-screen {
-  position: fixed; inset:0; z-index: 9999;
-  background: var(--milk);
+  position: fixed; inset: 0; z-index: 9999;
+  background: #060f0a;
   display: flex; align-items: center; justify-content: center;
-  flex-direction: column;
-  transition: opacity 0.6s, transform 0.6s;
+  flex-direction: column; gap: 2rem;
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
 #password-screen.hidden {
-  opacity: 0; pointer-events: none; transform: scale(1.05);
+  opacity: 0; pointer-events: none; transform: scale(1.04);
 }
+
 #password-screen h1 {
   font-family: var(--font-display);
-  font-size: 2.4rem; font-weight: 300;
-  color: var(--emerald); margin-bottom: 0.5rem;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 300;
+  color: var(--emerald);
   letter-spacing: -0.02em;
+  opacity: 0;
+  animation: pwFadeUp 0.9s ease 0.35s forwards;
 }
-#password-screen p {
-  color: var(--text-dim); font-size: 0.95rem;
-  margin-bottom: 2rem;
-}
+
 .pw-input-wrap {
-  display: flex; gap: 0.75rem; align-items: center;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 1.2rem;
+  opacity: 0;
+  animation: pwFadeUp 0.9s ease 1s forwards;
 }
+
 .pw-input-wrap input {
-  padding: 0.75rem 1.25rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  padding: 0.8rem 1.4rem;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 10px;
   font-size: 1rem;
   font-family: var(--font-body);
-  background: var(--white);
+  color: rgba(255,255,255,0.88);
   outline: none;
-  width: 260px;
+  width: 280px;
+  letter-spacing: 0.08em;
   transition: border-color 0.3s;
+  caret-color: var(--emerald);
+}
+.pw-input-wrap input::placeholder {
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.02em;
 }
 .pw-input-wrap input:focus {
-  border-color: var(--emerald);
+  border-color: rgba(255,255,255,0.45);
 }
-.pw-input-wrap button {
-  padding: 0.75rem 1.5rem;
-  background: var(--emerald);
+
+.pw-btn {
+  padding: 0.7rem 2.2rem;
+  background: transparent;
   color: #fff;
-  border: none; border-radius: 8px;
-  font-size: 0.95rem; font-weight: 600;
-  cursor: pointer; transition: background 0.3s;
+  border: 1px solid var(--emerald);
+  border-radius: 10px;
+  font-size: 1rem; font-weight: 600;
   font-family: var(--font-body);
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease, background 0.25s, transform 0.2s;
 }
-.pw-input-wrap button:hover { background: var(--emerald-dark); }
+.pw-btn.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.pw-btn:hover {
+  background: rgba(26,107,74,0.25);
+  transform: translateY(-1px);
+}
+
 .pw-error {
-  color: #c0392b; font-size: 0.85rem; margin-top: 1rem;
+  color: rgba(220,80,70,0.9);
+  font-size: 0.85rem;
   height: 1.2rem;
+  letter-spacing: 0.01em;
 }
 
 /* ═══ SITE WRAPPER ═══ */
@@ -414,10 +447,10 @@ footer {
 <div id="password-screen">
   <h1>Вы в Уожан?</h1>
   <div class="pw-input-wrap">
-    <input type="password" id="pw-input" placeholder="Пароль" autocomplete="off">
-    <button onclick="checkPassword()">Да!</button>
+    <input type="password" id="pw-input" placeholder="пароль" autocomplete="off">
+    <button class="pw-btn" id="pw-btn" onclick="checkPassword()">Да!</button>
+    <div class="pw-error" id="pw-error"></div>
   </div>
-  <div class="pw-error" id="pw-error"></div>
 </div>
 
 <!-- MAIN SITE -->
@@ -511,8 +544,16 @@ function checkPassword() {
   }
 }
 
-document.getElementById('pw-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') checkPassword();
+const pwInput = document.getElementById('pw-input');
+const pwBtn   = document.getElementById('pw-btn');
+const PW_LEN  = CORRECT_HASH.length;
+
+pwInput.addEventListener('input', () => {
+  pwBtn.classList.toggle('show', pwInput.value.length === PW_LEN);
+  document.getElementById('pw-error').textContent = '';
+});
+pwInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && pwInput.value.length === PW_LEN) checkPassword();
 });
 
 // Auto-auth for session
