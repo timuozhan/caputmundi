@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta name="googlebot" content="noindex, nofollow">
+<title>Уожан — Поселение</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --milk: #f5f0e8;
+  --milk-light: #faf7f2;
+  --white: #ffffff;
+  --emerald: #1a6b4a;
+  --emerald-dark: #134f37;
+  --emerald-light: #e8f5ee;
+  --text: #2c2418;
+  --text-dim: #7a7062;
+  --border: #e5dfd4;
+  --font-display: 'Source Serif 4', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--text);
+  background: var(--milk-light);
+  overflow-x: hidden;
+}
+
+/* ═══ PASSWORD SCREEN ═══ */
+#password-screen {
+  position: fixed; inset:0; z-index: 9999;
+  background: var(--milk);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  transition: opacity 0.6s, transform 0.6s;
+}
+#password-screen.hidden {
+  opacity: 0; pointer-events: none; transform: scale(1.05);
+}
+#password-screen h1 {
+  font-family: var(--font-display);
+  font-size: 2.4rem; font-weight: 300;
+  color: var(--emerald); margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+#password-screen p {
+  color: var(--text-dim); font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+.pw-input-wrap {
+  display: flex; gap: 0.75rem; align-items: center;
+}
+.pw-input-wrap input {
+  padding: 0.75rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: var(--font-body);
+  background: var(--white);
+  outline: none;
+  width: 260px;
+  transition: border-color 0.3s;
+}
+.pw-input-wrap input:focus {
+  border-color: var(--emerald);
+}
+.pw-input-wrap button {
+  padding: 0.75rem 1.5rem;
+  background: var(--emerald);
+  color: #fff;
+  border: none; border-radius: 8px;
+  font-size: 0.95rem; font-weight: 600;
+  cursor: pointer; transition: background 0.3s;
+  font-family: var(--font-body);
+}
+.pw-input-wrap button:hover { background: var(--emerald-dark); }
+.pw-error {
+  color: #c0392b; font-size: 0.85rem; margin-top: 1rem;
+  height: 1.2rem;
+}
+
+/* ═══ SITE WRAPPER ═══ */
+#site { display: none; }
+#site.visible { display: block; }
+
+/* ═══ PARALLAX HERO ═══ */
+.hero {
+  position: relative;
+  height: 100vh; min-height: 600px;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  background: var(--milk);
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(26,107,74,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 30%, rgba(26,107,74,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 80%, rgba(200,180,140,0.12) 0%, transparent 60%),
+    var(--milk);
+  will-change: transform;
+}
+/* SVG noise texture */
+.hero-noise {
+  position: absolute; inset: 0;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 256px;
+}
+.hero-content {
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: 2rem;
+}
+.hero-content h1 {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 300;
+  color: var(--emerald-dark);
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.hero-content .subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.35rem);
+  color: var(--text-dim);
+  font-weight: 400;
+  max-width: 560px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.6;
+}
+.hero-cta {
+  display: inline-block;
+  padding: 0.9rem 2.2rem;
+  background: var(--emerald);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background 0.3s, transform 0.2s;
+}
+.hero-cta:hover { background: var(--emerald-dark); transform: translateY(-1px); }
+
+.hero-scroll-hint {
+  position: absolute; bottom: 2.5rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center;
+  color: var(--text-dim); font-size: 0.8rem;
+  animation: float 2.5s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ═══ SECTION TITLES ═══ */
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 600;
+  color: var(--emerald-dark);
+  text-align: center;
+  margin-bottom: 1rem;
+  letter-spacing: -0.02em;
+}
+.section-subtitle {
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 1.05rem;
+  max-width: 600px;
+  margin: 0 auto 3.5rem;
+  line-height: 1.6;
+}
+
+/* ═══ DOMAIN GALLERY ═══ */
+#domains {
+  padding: 6rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.domain-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 5rem;
+  align-items: start;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s, transform 0.7s;
+}
+.domain-card.visible {
+  opacity: 1; transform: translateY(0);
+}
+.domain-card:nth-child(even) {
+  direction: rtl;
+}
+.domain-card:nth-child(even) > * {
+  direction: ltr;
+}
+.domain-gallery {
+  position: relative;
+}
+.domain-main-img {
+  width: 100%; aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: 12px;
+  background: var(--border);
+  display: block;
+}
+.domain-thumbs {
+  display: flex; gap: 0.5rem; margin-top: 0.75rem;
+}
+.domain-thumbs img {
+  width: 64px; height: 48px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.3s, opacity 0.3s;
+  opacity: 0.6;
+}
+.domain-thumbs img:hover,
+.domain-thumbs img.active {
+  border-color: var(--emerald);
+  opacity: 1;
+}
+.domain-info {
+  padding-top: 0.5rem;
+}
+.domain-icon {
+  font-size: 1.5rem;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  color: var(--emerald);
+}
+.domain-info h3 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--emerald-dark);
+  margin-bottom: 1rem;
+  letter-spacing: -0.01em;
+}
+.domain-info p {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  line-height: 1.75;
+  margin-bottom: 0.75rem;
+}
+
+/* placeholder for domains without images */
+.img-placeholder {
+  width: 100%; aspect-ratio: 4/3;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--milk) 0%, var(--emerald-light) 100%);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--emerald);
+  font-size: 3rem;
+}
+
+/* ═══ ARTIFACT SECTION ═══ */
+#model-section {
+  padding: 4rem 2rem 6rem;
+  background: var(--milk);
+}
+#model-section .section-title { margin-bottom: 0.5rem; }
+#artifact-mount {
+  max-width: 1200px;
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  background: #f5f4f0;
+}
+
+/* ═══ FOOTER ═══ */
+footer {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 768px) {
+  .domain-card {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .domain-card:nth-child(even) { direction: ltr; }
+  #domains { padding: 4rem 1.25rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- PASSWORD SCREEN -->
+<div id="password-screen">
+  <h1>Уожан</h1>
+  <p>Доступ по приглашению</p>
+  <div class="pw-input-wrap">
+    <input type="password" id="pw-input" placeholder="Пароль" autocomplete="off">
+    <button onclick="checkPassword()">Войти</button>
+  </div>
+  <div class="pw-error" id="pw-error"></div>
+</div>
+
+<!-- MAIN SITE -->
+<div id="site">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg" id="hero-bg"></div>
+    <div class="hero-noise"></div>
+    <div class="hero-content">
+      <h1>Уожан</h1>
+      <p class="subtitle">Поселение в гармонии с природой — автономность, сообщество, долголетие</p>
+      <a href="#domains" class="hero-cta">Узнать больше</a>
+    </div>
+    <div class="hero-scroll-hint">
+      <span>↓</span>
+    </div>
+  </section>
+
+  <!-- DOMAINS -->
+  <section id="domains">
+    <h2 class="section-title">Домены поселения</h2>
+    <p class="section-subtitle">Девять взаимосвязанных направлений, формирующих устойчивую экосистему Уожана</p>
+
+    <!-- ЗЕМЛЯ -->
+    <div class="domain-card" data-domain="earth">
+      <div class="domain-gallery">
+        <img class="domain-main-img" src="images/location/Gemini_Generated_Image_lawtxvlawtxvlawt.png" alt="Земля">
+        <div class="domain-thumbs">
+          <img src="images/location/Gemini_Generated_Image_lawtxvlawtxvlawt.png" alt="" class="active">
+          <img src="images/location/Gemini_Generated_Image_nob5p0nob5p0nob5.png" alt="">
+          <img src="images/location/Gemini_Generated_Image_nw00hdnw00hdnw00.png" alt="">
+          <img src="images/location/Gemini_Generated_Image_rf8pzprf8pzprf8p.png" alt="">
+          <img src="images/location/Gemini_Generated_Image_xwfii8xwfii8xwfi.png" alt="">
+          <img src="images/location/Gemini_Generated_Image_y6bzjcy6bzjcy6bz.png" alt="">
+        </div>
+      </div>
+      <div class="domain-info">
+        <div class="domain-icon">⬡</div>
+        <h3>Земля</h3>
+        <p>Две основных зоны: село (ИЖС) — под жилую и социальную застройку, и Забродье (СХ, рекреация) — под ферму, виллы, санаторий и СЭС.</p>
+        <p>Освоение ведётся по принципу бережного землепользования. Налоговая нагрузка минимальна, площадь рассчитана с запасом. Сенокосы и пастбища, грядки и ягодники расположены в соседних долинах и логах.</p>
+      </div>
+    </div>
+
+    <!-- ФЕРМА -->
+    <div class="domain-card" data-domain="farm">
+      <div class="domain-gallery">
+        <img class="domain-main-img" src="images/farm/Gemini_Generated_Image_6crshw6crshw6crs%20(1).png" alt="Ферма">
+        <div class="domain-thumbs">
+          <img src="images/farm/Gemini_Generated_Image_6crshw6crshw6crs%20(1).png" alt="" class="active">
+          <img src="images/farm/Gemini_Generated_Image_9003759003759003.png" alt="">
+          <img src="images/farm/Gemini_Generated_Image_b34mhmb34mhmb34m.png" alt="">
+          <img src="images/farm/Gemini_Generated_Image_igds5migds5migds.png" alt="">
+          <img src="images/farm/Gemini_Generated_Image_igs4mzigs4mzigs4.png" alt="">
+          <img src="images/farm/Gemini_Generated_Image_l7iseil7iseil7is.png" alt="">
+          <img src="images/farm/Gemini_Generated_Image_l86n5pl86n5pl86n.png" alt="">
+          <img src="images/farm/Gemini_Generated_Image_y5e7dly5e7dly5e7.png" alt="">
+        </div>
+      </div>
+      <div class="domain-info">
+        <div class="domain-icon">◎</div>
+        <h3>Ферма</h3>
+        <p>Агрокомплекс полного цикла. Его производственные мощности формируются от численности населения с множителем 1,25 для гарантированного изобилия. На ферме производятся молоко, мясо, рыба, яйца, овощи, картофель, бобовые, ягоды, мёд и травяные сборы, ягодные джемы.</p>
+        <p>Молочное стадо (швицкая порода коров и зааненские козы) — основа системы: свежее молоко и мясо высокого качества. Дополняют рацион бройлеры и кролики, рыба — форель и пелядь из прудов на проточной горной воде Чемала. BSF-ферма перерабатывает органику в ценный корм, сокращая отходы до минимума.</p>
+        <p>Маржинальные направления — мёд, травы и ягоды — приносят стабильную прибыль при минимальных вложениях.</p>
+      </div>
+    </div>
+
+    <!-- СЕЛО -->
+    <div class="domain-card" data-domain="selo">
+      <div class="domain-gallery">
+        <img class="domain-main-img" src="images/vilage/Gemini_Generated_Image_aiqhgnaiqhgnaiqh.png" alt="Село">
+        <div class="domain-thumbs">
+          <img src="images/vilage/Gemini_Generated_Image_aiqhgnaiqhgnaiqh.png" alt="" class="active">
+          <img src="images/vilage/Gemini_Generated_Image_g4sujeg4sujeg4su.png" alt="">
+          <img src="images/vilage/Gemini_Generated_Image_i0tmdzi0tmdzi0tm.png" alt="">
+          <img src="images/vilage/Gemini_Generated_Image_nvhxu0nvhxu0nvhx.png" alt="">
+          <img src="images/vilage/Gemini_Generated_Image_nvr240nvr240nvr2.png" alt="">
+        </div>
+      </div>
+      <div class="domain-info">
+        <div class="domain-icon">●</div>
+        <h3>Село</h3>
+        <p>Социальный центр Уожана. Здесь живут сотрудники с семьями и местные жители. Жильё — комфортные блокированные дома, часть из которых продаётся, а часть сдаётся в аренду персоналу с семьями.</p>
+        <p>Социальная инфраструктура масштабируется под размер поселения: школа-сад, коворкинг-библиотека, магазин-кафе, ФАП, спортплощадка, часовня, детская площадка и общественные пространства. Всё это формирует комфортную среду для круглогодичного проживания.</p>
+      </div>
+    </div>
+
+    <!-- САНАТОРИЙ -->
+    <div class="domain-card" data-domain="sanatorium">
+      <div class="domain-gallery">
+        <img class="domain-main-img" src="images/sanatorium/Gemini_Generated_Image_8mx0i38mx0i38mx0.png" alt="Санаторий">
+        <div class="domain-thumbs">
+          <img src="images/sanatorium/Gemini_Generated_Image_8mx0i38mx0i38mx0.png" alt="" class="active">
+          <img src="images/sanatorium/Gemini_Generated_Image_9egam59egam59ega.png" alt="">
+          <img src="images/sanatorium/Gemini_Generated_Image_a4wdjua4wdjua4wd.png" alt="">
+          <img src="images/sanatorium/Gemini_Generated_Image_l3oqxwl3oqxwl3oq.png" alt="">
+          <img src="images/sanatorium/Gemini_Generated_Image_m0j79em0j79em0j7.png" alt="">
+          <img src="images/sanatorium/Gemini_Generated_Image_t342oft342oft342.png" alt="">
+          <img src="images/sanatorium/Gemini_Generated_Image_us96paus96paus96.png" alt="">
+          <img src="images/sanatorium/Gemini_Generated_Image_vs6i1hvs6i1hvs6i.png" alt="">
+          <img src="images/sanatorium/Gemini_Generated_Image_ydfv6hydfv6hydfv.png" alt="">
+        </div>
+      </div>
+      <div class="domain-info">
+        <div class="domain-icon">◈</div>
+        <h3>Санаторий «Долголетие»</h3>
+        <p>Ключевой центр здоровья и основной источник выручки. Банный комплекс, бассейн и аквафитнес, камеры сенсорной депривации, крио- и кислородные камеры, восточные практики и мастера цигун создают целостный опыт восстановления.</p>
+        <p>Санаторий обслуживает два потока — многодневные ретрит-программы и разовые посещения для резидентов. Модель гибко прогнозирует расходы и прибыльность при разных сценариях.</p>
+        <p>Персонал санатория включён в единую систему поселения.</p>
+      </div>
+    </div>
+
+    <!-- ВИЛЛЫ -->
+    <div class="domain-card" data-domain="villas">
+      <div class="domain-gallery">
+        <img class="domain-main-img" src="images/villa/Gemini_Generated_Image_3uka7y3uka7y3uka.png" alt="Виллы">
+        <div class="domain-thumbs">
+          <img src="images/villa/Gemini_Generated_Image_3uka7y3uka7y3uka.png" alt="" class="active">
+          <img src="images/villa/Gemini_Generated_Image_eax791eax791eax7%20(1).png" alt="">
+        </div>
+      </div>
+      <div class="domain-info">
+        <div class="domain-icon">⬡</div>
+        <h3>Виллы (Резиденции)</h3>
+        <p>Пространство для жизни в гармонии с природой. Просторные участки, виды на реку и долину, чистый воздух. Каждая вилла — это сочетание комфорта, тишины и безопасности.</p>
+        <p>Резиденты получают доступ к сервисам санатория, инфраструктуре посёлка, обеспечиваются фермой. Ежегодный взнос покрывает обслуживание, энергетику и управление. Продажи off-plan формируют возврат капитальных затрат.</p>
+      </div>
+    </div>
+
+    <!-- ЭНЕРГИЯ -->
+    <div class="domain-card" data-domain="energy">
+      <div class="domain-gallery">
+        <img class="domain-main-img" src="images/art/Gemini_Generated_Image_c2vw58c2vw58c2vw.png" alt="Энергия">
+        <div class="domain-thumbs">
+          <img src="images/art/Gemini_Generated_Image_c2vw58c2vw58c2vw.png" alt="" class="active">
+          <img src="images/art/Gemini_Generated_Image_hoqi9yhoqi9yhoqi.png" alt="">
+        </div>
+      </div>
+      <div class="domain-info">
+        <div class="domain-icon">▲</div>
+        <h3>Энергия</h3>
+        <p>Энергосистема поселения опирается на солнечную станцию и газгольдеры. Пиковая нагрузка покрывается за счёт адаптивного распределения мощностей.</p>
+        <p>Микро-ГЭС на реке Чемал предусмотрена как запасной круглогодичный источник энергии.</p>
+      </div>
+    </div>
+
+    <!-- БЕЗОПАСНОСТЬ -->
+    <div class="domain-card" data-domain="security">
+      <div class="domain-gallery">
+        <img class="domain-main-img" src="images/service/Gemini_Generated_Image_b9a3inb9a3inb9a3%20(1).png" alt="Безопасность">
+        <div class="domain-thumbs">
+          <img src="images/service/Gemini_Generated_Image_b9a3inb9a3inb9a3%20(1).png" alt="" class="active">
+          <img src="images/service/Gemini_Generated_Image_iek95kiek95kiek9.png" alt="">
+        </div>
+      </div>
+      <div class="domain-info">
+        <div class="domain-icon">▣</div>
+        <h3>Безопасность</h3>
+        <p>Многоуровневая система защиты и связи: малая группа квалифицированных сотрудников инструктирует и обучает население действиям в случае ЧС на сезонных тактических сборах; собственная техника, устойчивая к воздействию РЭБ; системы p2p- и радиосвязи с соседними поселениями и региональными единомышленниками; отработанные протоколы действий — всё это обеспечивает безопасность в любой ситуации.</p>
+        <p>Инфраструктура безопасности создаёт ощущение спокойствия, а через вовлечение в подготовку дарит чувство причастности.</p>
+      </div>
+    </div>
+
+    <!-- УТИЛИЗАЦИЯ -->
+    <div class="domain-card" data-domain="util">
+      <div class="domain-gallery">
+        <img class="domain-main-img" src="images/art/Gemini_Generated_Image_pmzuympmzuympmzu.png" alt="Утилизация">
+        <div class="domain-thumbs">
+          <img src="images/art/Gemini_Generated_Image_pmzuympmzuympmzu.png" alt="" class="active">
+          <img src="images/art/Gemini_Generated_Image_t86vi2t86vi2t86v.png" alt="">
+        </div>
+      </div>
+      <div class="domain-info">
+        <div class="domain-icon">●</div>
+        <h3>Утилизация</h3>
+        <p>Экологически замкнутый цикл: органика перерабатывается в компост, пластик прессуется, неперерабатываемые отходы централизованно вывозятся на полигон.</p>
+        <p>BSF-ферма обеспечивает двойное использование ресурсов — и экологию, и экономику.</p>
+      </div>
+    </div>
+
+    <!-- УК -->
+    <div class="domain-card" data-domain="uk">
+      <div class="domain-gallery">
+        <img class="domain-main-img" src="images/service/Gemini_Generated_Image_khu1nikhu1nikhu1.png" alt="УК">
+        <div class="domain-thumbs">
+          <img src="images/service/Gemini_Generated_Image_khu1nikhu1nikhu1.png" alt="" class="active">
+          <img src="images/service/Gemini_Generated_Image_ujnrnsujnrnsujnr.png" alt="">
+        </div>
+      </div>
+      <div class="domain-info">
+        <div class="domain-icon">◉</div>
+        <h3>Управляющая компания</h3>
+        <p>Фонд «Уожан» владеет и управляет всем проектом. Все домены — подразделения фонда. Штаб включает операционную команду, юриста и IT-поддержку.</p>
+        <p>Описание в подготовке.</p>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- INTERACTIVE MODEL -->
+  <section id="model-section">
+    <h2 class="section-title">Финансовая модель</h2>
+    <p class="section-subtitle">Интерактивная модель поселения — настраивайте параметры и анализируйте экономику каждого домена</p>
+    <div id="artifact-mount"></div>
+  </section>
+
+  <footer>
+    <p>© Уожан — все материалы конфиденциальны</p>
+  </footer>
+
+</div>
+
+<!-- SCRIPTS -->
+<script>
+// ══ PASSWORD ══
+const CORRECT_HASH = 'caput_mundi';
+
+function checkPassword() {
+  const input = document.getElementById('pw-input').value;
+  if (input === CORRECT_HASH) {
+    document.getElementById('password-screen').classList.add('hidden');
+    document.getElementById('site').classList.add('visible');
+    sessionStorage.setItem('auth', '1');
+    setTimeout(() => {
+      document.getElementById('password-screen').style.display = 'none';
+    }, 700);
+  } else {
+    document.getElementById('pw-error').textContent = 'Неверный пароль';
+    document.getElementById('pw-input').value = '';
+  }
+}
+
+document.getElementById('pw-input').addEventListener('keydown', e => {
+  if (e.key === 'Enter') checkPassword();
+});
+
+// Auto-auth for session
+if (sessionStorage.getItem('auth') === '1') {
+  document.getElementById('password-screen').style.display = 'none';
+  document.getElementById('site').classList.add('visible');
+}
+
+// ══ PARALLAX ══
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const bg = document.getElementById('hero-bg');
+  if (bg) bg.style.transform = `translateY(${scrollY * 0.4}px)`;
+});
+
+// ══ SCROLL REVEAL ══
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.domain-card').forEach(c => observer.observe(c));
+
+// ══ GALLERY THUMBNAIL CLICKS ══
+document.querySelectorAll('.domain-thumbs img').forEach(thumb => {
+  thumb.addEventListener('click', function() {
+    const gallery = this.closest('.domain-gallery');
+    const mainImg = gallery.querySelector('.domain-main-img');
+    if (mainImg) {
+      mainImg.src = this.src;
+      gallery.querySelectorAll('.domain-thumbs img').forEach(t => t.classList.remove('active'));
+      this.classList.add('active');
+    }
+  });
+});
+</script>
+
+<!-- REACT for Artifact -->
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script>
+  // Load and compile artifact
+  fetch('artifact.jsx')
+    .then(r => r.text())
+    .then(code => {
+      const compiled = Babel.transform(code, { presets: ['react'] }).code;
+      const script = document.createElement('script');
+      script.textContent = compiled;
+      document.body.appendChild(script);
+      // Mount
+      const mount = document.getElementById('artifact-mount');
+      if (mount && window.SettlementModel) {
+        ReactDOM.createRoot(mount).render(React.createElement(window.SettlementModel));
+      }
+    })
+    .catch(err => {
+      console.error('Artifact load error:', err);
+      document.getElementById('artifact-mount').innerHTML =
+        '<div style="padding:3rem;text-align:center;color:#7a7062">Финансовая модель загружается при размещении на сервере</div>';
+    });
+</script>
+
+</body>
+</html>
