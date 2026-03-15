@@ -195,9 +195,9 @@ body {
   line-height: 1.6;
 }
 
-/* ═══ DOMAIN GALLERY — ПОЛНОШИРИННЫЕ БЛОКИ ═══ */
+/* ═══ DOMAIN VIEWER ═══ */
 #domains {
-  padding: 4rem 0 0;
+  padding: 5rem 0 6rem;
 }
 #domains > .section-title,
 #domains > .section-subtitle {
@@ -206,78 +206,136 @@ body {
   margin-left: auto;
   margin-right: auto;
 }
-.domain-card {
-  display: grid;
-  grid-template-columns: 60% 40%;
-  min-height: 520px;
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.8s, transform 0.8s;
-}
-.domain-card.visible {
-  opacity: 1; transform: translateY(0);
-}
-.domain-card:nth-child(even) {
-  grid-template-columns: 40% 60%;
-}
-.domain-card:nth-child(even) .domain-gallery {
-  order: 2;
-}
-.domain-card:nth-child(even) .domain-info {
-  order: 1;
-}
-.domain-gallery {
-  position: relative;
-  overflow: hidden;
-}
-.domain-main-img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.6s ease;
-}
-.domain-card:hover .domain-main-img {
-  transform: scale(1.03);
-}
-.domain-thumbs { display: none; }
 
-.domain-info {
+.domain-selector-wrap {
+  max-width: 1200px;
+  margin: 0 auto 3rem;
+  padding: 0 2rem;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.domain-selector {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+.domain-btn {
+  padding: 0.55rem 1.3rem;
+  background: rgba(26,107,74,0.07);
+  border: 1px solid rgba(26,107,74,0.25);
+  color: var(--emerald-dark);
+  border-radius: 8px;
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+.domain-btn:hover {
+  background: rgba(26,107,74,0.14);
+  border-color: var(--emerald);
+}
+.domain-btn.active {
+  background: var(--emerald);
+  border-color: var(--emerald);
+  color: #fff;
+}
+
+.domain-view {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: 520px;
+  align-items: center;
+}
+
+.dv-img-wrap {
+  position: relative;
+  padding: 2rem 1.5rem 2rem 2rem;
+}
+.dv-img-wrap img {
+  width: 100%;
+  height: 460px;
+  object-fit: cover;
+  border-radius: 16px;
+  display: block;
+  transition: opacity 0.3s;
+}
+.img-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.7);
+  color: var(--emerald-dark);
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+  z-index: 2;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+}
+.img-arrow:hover {
+  background: #fff;
+  transform: translateY(-50%) scale(1.08);
+}
+.img-prev { left: 3rem; }
+.img-next { right: 2rem; }
+
+.img-dots {
+  position: absolute;
+  bottom: 3.2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+.img-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.45);
+  border: 1.5px solid rgba(255,255,255,0.85);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.img-dot.active {
+  background: #fff;
+  transform: scale(1.35);
+}
+
+.dv-text {
+  padding: 2rem 2.5rem 2rem 3rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 3.5rem 4rem;
-  background: var(--milk-light);
 }
-.domain-icon {
-  font-size: 1.3rem;
-  display: inline-block;
-  margin-bottom: 0.75rem;
+.dv-icon {
+  font-size: 1.4rem;
   color: var(--emerald);
-  opacity: 0.7;
+  margin-bottom: 0.75rem;
+  opacity: 0.65;
 }
-.domain-info h3 {
+.dv-text h3 {
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
-  font-weight: 400;
+  font-size: clamp(2rem, 3vw, 3rem);
+  font-weight: 300;
   color: var(--emerald-dark);
-  margin-bottom: 1.25rem;
-  letter-spacing: -0.02em;
-  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
 }
-.domain-info p {
+.dv-text p {
   color: var(--text-dim);
   font-size: 0.95rem;
-  line-height: 1.8;
+  line-height: 1.85;
   margin-bottom: 0.75rem;
-}
-
-/* placeholder for domains without images */
-.img-placeholder {
-  width: 100%; height: 100%; min-height: 400px;
-  background: linear-gradient(135deg, var(--milk) 0%, var(--emerald-light) 100%);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--emerald);
-  font-size: 3rem;
 }
 
 /* ═══ MODEL SECTION ═══ */
@@ -311,15 +369,14 @@ footer {
 
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 768px) {
-  .domain-card,
-  .domain-card:nth-child(even) {
+  .domain-view {
     grid-template-columns: 1fr;
-    min-height: auto;
   }
-  .domain-card:nth-child(even) .domain-gallery { order: 0; }
-  .domain-card:nth-child(even) .domain-info { order: 0; }
-  .domain-gallery { min-height: 260px; }
-  .domain-info { padding: 2rem 1.5rem; }
+  .dv-img-wrap { padding: 1.5rem 1.5rem 1rem; }
+  .dv-img-wrap img { height: 260px; }
+  .dv-text { padding: 1rem 1.5rem 2rem; }
+  .img-prev { left: 2rem; }
+  .img-next { right: 1.5rem; }
 }
 </style>
 </head>
@@ -367,178 +424,31 @@ footer {
     <h2 class="section-title">Домены поселения</h2>
     <p class="section-subtitle">Девять взаимосвязанных направлений, формирующих устойчивую экосистему Уожана</p>
 
-    <!-- ЗЕМЛЯ -->
-    <div class="domain-card" data-domain="earth">
-      <div class="domain-gallery">
-        <img class="domain-main-img" src="images/location/Gemini_Generated_Image_lawtxvlawtxvlawt.png" alt="Земля">
-        <div class="domain-thumbs">
-          <img src="images/location/Gemini_Generated_Image_lawtxvlawtxvlawt.png" alt="" class="active">
-          <img src="images/location/Gemini_Generated_Image_nob5p0nob5p0nob5.png" alt="">
-          <img src="images/location/Gemini_Generated_Image_nw00hdnw00hdnw00.png" alt="">
-          <img src="images/location/Gemini_Generated_Image_rf8pzprf8pzprf8p.png" alt="">
-          <img src="images/location/Gemini_Generated_Image_xwfii8xwfii8xwfi.png" alt="">
-          <img src="images/location/Gemini_Generated_Image_y6bzjcy6bzjcy6bz.png" alt="">
-        </div>
-      </div>
-      <div class="domain-info">
-        <div class="domain-icon">⬡</div>
-        <h3>Земля</h3>
-        <p>Две основных зоны: село (ИЖС) — под жилую и социальную застройку, и Забродье (СХ, рекреация) — под ферму, виллы, санаторий и СЭС.</p>
-        <p>Освоение ведётся по принципу бережного землепользования. Налоговая нагрузка минимальна, площадь рассчитана с запасом. Сенокосы и пастбища, грядки и ягодники расположены в соседних долинах и логах.</p>
+    <div class="domain-selector-wrap">
+      <div class="domain-selector">
+        <button class="domain-btn active" data-key="earth">Земля</button>
+        <button class="domain-btn" data-key="farm">Ферма</button>
+        <button class="domain-btn" data-key="selo">Село</button>
+        <button class="domain-btn" data-key="sanatorium">Санаторий</button>
+        <button class="domain-btn" data-key="villas">Виллы</button>
+        <button class="domain-btn" data-key="energy">Энергия</button>
+        <button class="domain-btn" data-key="security">Безопасность</button>
+        <button class="domain-btn" data-key="util">Утилизация</button>
+        <button class="domain-btn" data-key="uk">УК</button>
       </div>
     </div>
 
-    <!-- ФЕРМА -->
-    <div class="domain-card" data-domain="farm">
-      <div class="domain-gallery">
-        <img class="domain-main-img" src="images/farm/Gemini_Generated_Image_6crshw6crshw6crs%20(1).png" alt="Ферма">
-        <div class="domain-thumbs">
-          <img src="images/farm/Gemini_Generated_Image_6crshw6crshw6crs%20(1).png" alt="" class="active">
-          <img src="images/farm/Gemini_Generated_Image_9003759003759003.png" alt="">
-          <img src="images/farm/Gemini_Generated_Image_b34mhmb34mhmb34m.png" alt="">
-          <img src="images/farm/Gemini_Generated_Image_igds5migds5migds.png" alt="">
-          <img src="images/farm/Gemini_Generated_Image_igs4mzigs4mzigs4.png" alt="">
-          <img src="images/farm/Gemini_Generated_Image_l7iseil7iseil7is.png" alt="">
-          <img src="images/farm/Gemini_Generated_Image_l86n5pl86n5pl86n.png" alt="">
-          <img src="images/farm/Gemini_Generated_Image_y5e7dly5e7dly5e7.png" alt="">
-        </div>
+    <div class="domain-view">
+      <div class="dv-img-wrap">
+        <img id="dv-img" src="" alt="">
+        <button class="img-arrow img-prev" id="img-prev">&#8592;</button>
+        <button class="img-arrow img-next" id="img-next">&#8594;</button>
+        <div class="img-dots" id="img-dots"></div>
       </div>
-      <div class="domain-info">
-        <div class="domain-icon">◎</div>
-        <h3>Ферма</h3>
-        <p>Агрокомплекс полного цикла. Его производственные мощности формируются от численности населения с множителем 1,25 для гарантированного изобилия. На ферме производятся молоко, мясо, рыба, яйца, овощи, картофель, бобовые, ягоды, мёд и травяные сборы, ягодные джемы.</p>
-        <p>Молочное стадо (швицкая порода коров и зааненские козы) — основа системы: свежее молоко и мясо высокого качества. Дополняют рацион бройлеры и кролики, рыба — форель и пелядь из прудов на проточной горной воде Чемала. BSF-ферма перерабатывает органику в ценный корм, сокращая отходы до минимума.</p>
-        <p>Маржинальные направления — мёд, травы и ягоды — приносят стабильную прибыль при минимальных вложениях.</p>
-      </div>
-    </div>
-
-    <!-- СЕЛО -->
-    <div class="domain-card" data-domain="selo">
-      <div class="domain-gallery">
-        <img class="domain-main-img" src="images/vilage/Gemini_Generated_Image_aiqhgnaiqhgnaiqh.png" alt="Село">
-        <div class="domain-thumbs">
-          <img src="images/vilage/Gemini_Generated_Image_aiqhgnaiqhgnaiqh.png" alt="" class="active">
-          <img src="images/vilage/Gemini_Generated_Image_g4sujeg4sujeg4su.png" alt="">
-          <img src="images/vilage/Gemini_Generated_Image_i0tmdzi0tmdzi0tm.png" alt="">
-          <img src="images/vilage/Gemini_Generated_Image_nvhxu0nvhxu0nvhx.png" alt="">
-          <img src="images/vilage/Gemini_Generated_Image_nvr240nvr240nvr2.png" alt="">
-        </div>
-      </div>
-      <div class="domain-info">
-        <div class="domain-icon">●</div>
-        <h3>Село</h3>
-        <p>Социальный центр Уожана. Здесь живут сотрудники с семьями и местные жители. Жильё — комфортные блокированные дома, часть из которых продаётся, а часть сдаётся в аренду персоналу с семьями.</p>
-        <p>Социальная инфраструктура масштабируется под размер поселения: школа-сад, коворкинг-библиотека, магазин-кафе, ФАП, спортплощадка, часовня, детская площадка и общественные пространства. Всё это формирует комфортную среду для круглогодичного проживания.</p>
-      </div>
-    </div>
-
-    <!-- САНАТОРИЙ -->
-    <div class="domain-card" data-domain="sanatorium">
-      <div class="domain-gallery">
-        <img class="domain-main-img" src="images/sanatorium/Gemini_Generated_Image_8mx0i38mx0i38mx0.png" alt="Санаторий">
-        <div class="domain-thumbs">
-          <img src="images/sanatorium/Gemini_Generated_Image_8mx0i38mx0i38mx0.png" alt="" class="active">
-          <img src="images/sanatorium/Gemini_Generated_Image_9egam59egam59ega.png" alt="">
-          <img src="images/sanatorium/Gemini_Generated_Image_a4wdjua4wdjua4wd.png" alt="">
-          <img src="images/sanatorium/Gemini_Generated_Image_l3oqxwl3oqxwl3oq.png" alt="">
-          <img src="images/sanatorium/Gemini_Generated_Image_m0j79em0j79em0j7.png" alt="">
-          <img src="images/sanatorium/Gemini_Generated_Image_t342oft342oft342.png" alt="">
-          <img src="images/sanatorium/Gemini_Generated_Image_us96paus96paus96.png" alt="">
-          <img src="images/sanatorium/Gemini_Generated_Image_vs6i1hvs6i1hvs6i.png" alt="">
-          <img src="images/sanatorium/Gemini_Generated_Image_ydfv6hydfv6hydfv.png" alt="">
-        </div>
-      </div>
-      <div class="domain-info">
-        <div class="domain-icon">◈</div>
-        <h3>Санаторий «Долголетие»</h3>
-        <p>Ключевой центр здоровья и основной источник выручки. Банный комплекс, бассейн и аквафитнес, камеры сенсорной депривации, крио- и кислородные камеры, восточные практики и мастера цигун создают целостный опыт восстановления.</p>
-        <p>Санаторий обслуживает два потока — многодневные ретрит-программы и разовые посещения для резидентов. Модель гибко прогнозирует расходы и прибыльность при разных сценариях.</p>
-        <p>Персонал санатория включён в единую систему поселения.</p>
-      </div>
-    </div>
-
-    <!-- ВИЛЛЫ -->
-    <div class="domain-card" data-domain="villas">
-      <div class="domain-gallery">
-        <img class="domain-main-img" src="images/villa/Gemini_Generated_Image_3uka7y3uka7y3uka.png" alt="Виллы">
-        <div class="domain-thumbs">
-          <img src="images/villa/Gemini_Generated_Image_3uka7y3uka7y3uka.png" alt="" class="active">
-          <img src="images/villa/Gemini_Generated_Image_eax791eax791eax7%20(1).png" alt="">
-        </div>
-      </div>
-      <div class="domain-info">
-        <div class="domain-icon">⬡</div>
-        <h3>Виллы (Резиденции)</h3>
-        <p>Пространство для жизни в гармонии с природой. Просторные участки, виды на реку и долину, чистый воздух. Каждая вилла — это сочетание комфорта, тишины и безопасности.</p>
-        <p>Резиденты получают доступ к сервисам санатория, инфраструктуре посёлка, обеспечиваются фермой. Ежегодный взнос покрывает обслуживание, энергетику и управление. Продажи off-plan формируют возврат капитальных затрат.</p>
-      </div>
-    </div>
-
-    <!-- ЭНЕРГИЯ -->
-    <div class="domain-card" data-domain="energy">
-      <div class="domain-gallery">
-        <img class="domain-main-img" src="images/art/Gemini_Generated_Image_c2vw58c2vw58c2vw.png" alt="Энергия">
-        <div class="domain-thumbs">
-          <img src="images/art/Gemini_Generated_Image_c2vw58c2vw58c2vw.png" alt="" class="active">
-          <img src="images/art/Gemini_Generated_Image_hoqi9yhoqi9yhoqi.png" alt="">
-        </div>
-      </div>
-      <div class="domain-info">
-        <div class="domain-icon">▲</div>
-        <h3>Энергия</h3>
-        <p>Энергосистема поселения опирается на солнечную станцию и газгольдеры. Пиковая нагрузка покрывается за счёт адаптивного распределения мощностей.</p>
-        <p>Микро-ГЭС на реке Чемал предусмотрена как запасной круглогодичный источник энергии.</p>
-      </div>
-    </div>
-
-    <!-- БЕЗОПАСНОСТЬ -->
-    <div class="domain-card" data-domain="security">
-      <div class="domain-gallery">
-        <img class="domain-main-img" src="images/service/Gemini_Generated_Image_b9a3inb9a3inb9a3%20(1).png" alt="Безопасность">
-        <div class="domain-thumbs">
-          <img src="images/service/Gemini_Generated_Image_b9a3inb9a3inb9a3%20(1).png" alt="" class="active">
-          <img src="images/service/Gemini_Generated_Image_iek95kiek95kiek9.png" alt="">
-        </div>
-      </div>
-      <div class="domain-info">
-        <div class="domain-icon">▣</div>
-        <h3>Безопасность</h3>
-        <p>Многоуровневая система защиты и связи: малая группа квалифицированных сотрудников инструктирует и обучает население действиям в случае ЧС на сезонных тактических сборах; собственная техника, устойчивая к воздействию РЭБ; системы p2p- и радиосвязи с соседними поселениями и региональными единомышленниками; отработанные протоколы действий — всё это обеспечивает безопасность в любой ситуации.</p>
-        <p>Инфраструктура безопасности создаёт ощущение спокойствия, а через вовлечение в подготовку дарит чувство причастности.</p>
-      </div>
-    </div>
-
-    <!-- УТИЛИЗАЦИЯ -->
-    <div class="domain-card" data-domain="util">
-      <div class="domain-gallery">
-        <img class="domain-main-img" src="images/art/Gemini_Generated_Image_pmzuympmzuympmzu.png" alt="Утилизация">
-        <div class="domain-thumbs">
-          <img src="images/art/Gemini_Generated_Image_pmzuympmzuympmzu.png" alt="" class="active">
-          <img src="images/art/Gemini_Generated_Image_t86vi2t86vi2t86v.png" alt="">
-        </div>
-      </div>
-      <div class="domain-info">
-        <div class="domain-icon">●</div>
-        <h3>Утилизация</h3>
-        <p>Экологически замкнутый цикл: органика перерабатывается в компост, пластик прессуется, неперерабатываемые отходы централизованно вывозятся на полигон.</p>
-        <p>BSF-ферма обеспечивает двойное использование ресурсов — и экологию, и экономику.</p>
-      </div>
-    </div>
-
-    <!-- УК -->
-    <div class="domain-card" data-domain="uk">
-      <div class="domain-gallery">
-        <img class="domain-main-img" src="images/service/Gemini_Generated_Image_khu1nikhu1nikhu1.png" alt="УК">
-        <div class="domain-thumbs">
-          <img src="images/service/Gemini_Generated_Image_khu1nikhu1nikhu1.png" alt="" class="active">
-          <img src="images/service/Gemini_Generated_Image_ujnrnsujnrnsujnr.png" alt="">
-        </div>
-      </div>
-      <div class="domain-info">
-        <div class="domain-icon">◉</div>
-        <h3>Управляющая компания</h3>
-        <p>Фонд «Уожан» владеет и управляет всем проектом. Все домены — подразделения фонда. Штаб включает операционную команду, юриста и IT-поддержку.</p>
-        <p>Описание в подготовке.</p>
+      <div class="dv-text">
+        <div class="dv-icon" id="dv-icon"></div>
+        <h3 id="dv-title"></h3>
+        <div id="dv-desc"></div>
       </div>
     </div>
 
@@ -587,27 +497,157 @@ window.addEventListener('scroll', () => {
   if (bg) bg.style.transform = `translateY(${scrollY * 0.4}px)`;
 });
 
-// ══ SCROLL REVEAL ══
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) e.target.classList.add('visible');
-  });
-}, { threshold: 0.15 });
+// ══ DOMAIN VIEWER ══
+const DOMAINS = {
+  earth: {
+    title: 'Земля', icon: '⬡',
+    images: [
+      'images/location/Gemini_Generated_Image_lawtxvlawtxvlawt.png',
+      'images/location/Gemini_Generated_Image_nob5p0nob5p0nob5.png',
+      'images/location/Gemini_Generated_Image_nw00hdnw00hdnw00.png',
+      'images/location/Gemini_Generated_Image_rf8pzprf8pzprf8p.png',
+      'images/location/Gemini_Generated_Image_xwfii8xwfii8xwfi.png',
+    ],
+    html: '<p>Две основных зоны: село (ИЖС) — под жилую и социальную застройку, и Забродье (СХ, рекреация) — под ферму, виллы, санаторий и СЭС.</p><p>Освоение ведётся по принципу бережного землепользования. Налоговая нагрузка минимальна, площадь рассчитана с запасом. Сенокосы и пастбища, грядки и ягодники расположены в соседних долинах и логах.</p>'
+  },
+  farm: {
+    title: 'Ферма', icon: '◎',
+    images: [
+      'images/farm/Gemini_Generated_Image_6crshw6crshw6crs%20(1).png',
+      'images/farm/Gemini_Generated_Image_9003759003759003.png',
+      'images/farm/Gemini_Generated_Image_b34mhmb34mhmb34m.png',
+      'images/farm/Gemini_Generated_Image_igds5migds5migds.png',
+      'images/farm/Gemini_Generated_Image_igs4mzigs4mzigs4.png',
+    ],
+    html: '<p>Агрокомплекс полного цикла. Производственные мощности формируются от численности населения с множителем 1,25 для гарантированного изобилия. На ферме производятся молоко, мясо, рыба, яйца, овощи, картофель, бобовые, ягоды, мёд и травяные сборы.</p><p>Молочное стадо (швицкая порода коров и зааненские козы) — основа системы. Дополняют рацион бройлеры и кролики, рыба — форель и пелядь из прудов на проточной горной воде Чемала. BSF-ферма перерабатывает органику в ценный корм.</p><p>Маржинальные направления — мёд, травы и ягоды — приносят стабильную прибыль при минимальных вложениях.</p>'
+  },
+  selo: {
+    title: 'Село', icon: '●',
+    images: [
+      'images/vilage/Gemini_Generated_Image_aiqhgnaiqhgnaiqh.png',
+      'images/vilage/Gemini_Generated_Image_g4sujeg4sujeg4su.png',
+      'images/vilage/Gemini_Generated_Image_i0tmdzi0tmdzi0tm.png',
+      'images/vilage/Gemini_Generated_Image_nvhxu0nvhxu0nvhx.png',
+      'images/vilage/Gemini_Generated_Image_nvr240nvr240nvr2.png',
+    ],
+    html: '<p>Социальный центр Уожана. Здесь живут сотрудники с семьями и местные жители. Жильё — комфортные блокированные дома, часть продаётся, часть сдаётся в аренду персоналу.</p><p>Инфраструктура масштабируется под размер поселения: школа-сад, коворкинг-библиотека, магазин-кафе, ФАП, спортплощадка, часовня, детская площадка и общественные пространства.</p>'
+  },
+  sanatorium: {
+    title: 'Санаторий «Долголетие»', icon: '◈',
+    images: [
+      'images/sanatorium/Gemini_Generated_Image_8mx0i38mx0i38mx0.png',
+      'images/sanatorium/Gemini_Generated_Image_9egam59egam59ega.png',
+      'images/sanatorium/Gemini_Generated_Image_a4wdjua4wdjua4wd.png',
+      'images/sanatorium/Gemini_Generated_Image_l3oqxwl3oqxwl3oq.png',
+      'images/sanatorium/Gemini_Generated_Image_m0j79em0j79em0j7.png',
+    ],
+    html: '<p>Ключевой центр здоровья и основной источник выручки. Банный комплекс, бассейн и аквафитнес, камеры сенсорной депривации, крио- и кислородные камеры, восточные практики и мастера цигун создают целостный опыт восстановления.</p><p>Санаторий обслуживает два потока — многодневные ретрит-программы и разовые посещения для резидентов. Персонал включён в единую систему поселения.</p>'
+  },
+  villas: {
+    title: 'Виллы', icon: '⬡',
+    images: [
+      'images/villa/Gemini_Generated_Image_3uka7y3uka7y3uka.png',
+      'images/villa/Gemini_Generated_Image_eax791eax791eax7%20(1).png',
+    ],
+    html: '<p>Пространство для жизни в гармонии с природой. Просторные участки, виды на реку и долину, чистый воздух. Каждая вилла — сочетание комфорта, тишины и безопасности.</p><p>Резиденты получают доступ к сервисам санатория, инфраструктуре посёлка, обеспечиваются фермой. Ежегодный взнос покрывает обслуживание, энергетику и управление.</p>'
+  },
+  energy: {
+    title: 'Энергия', icon: '▲',
+    images: [
+      'images/art/Gemini_Generated_Image_c2vw58c2vw58c2vw.png',
+      'images/art/Gemini_Generated_Image_hoqi9yhoqi9yhoqi.png',
+    ],
+    html: '<p>Энергосистема поселения опирается на солнечную станцию и газгольдеры. Пиковая нагрузка покрывается за счёт адаптивного распределения мощностей.</p><p>Микро-ГЭС на реке Чемал предусмотрена как запасной круглогодичный источник энергии.</p>'
+  },
+  security: {
+    title: 'Безопасность', icon: '▣',
+    images: [
+      'images/service/Gemini_Generated_Image_b9a3inb9a3inb9a3%20(1).png',
+      'images/service/Gemini_Generated_Image_iek95kiek95kiek9.png',
+    ],
+    html: '<p>Многоуровневая система защиты: квалифицированные сотрудники инструктируют население на сезонных тактических сборах. Собственная техника, устойчивая к РЭБ, системы p2p- и радиосвязи с соседними поселениями.</p><p>Отработанные протоколы действий обеспечивают безопасность в любой ситуации и дарят чувство причастности через вовлечение в подготовку.</p>'
+  },
+  util: {
+    title: 'Утилизация', icon: '↺',
+    images: [
+      'images/art/Gemini_Generated_Image_pmzuympmzuympmzu.png',
+      'images/art/Gemini_Generated_Image_t86vi2t86vi2t86v.png',
+    ],
+    html: '<p>Экологически замкнутый цикл: органика перерабатывается в компост, пластик прессуется, неперерабатываемые отходы централизованно вывозятся на полигон.</p><p>BSF-ферма обеспечивает двойное использование ресурсов — и экологию, и экономику.</p>'
+  },
+  uk: {
+    title: 'Управляющая компания', icon: '◉',
+    images: [
+      'images/service/Gemini_Generated_Image_khu1nikhu1nikhu1.png',
+      'images/service/Gemini_Generated_Image_ujnrnsujnrnsujnr.png',
+    ],
+    html: '<p>Фонд «Уожан» владеет и управляет всем проектом. Все домены — подразделения фонда. Штаб включает операционную команду, юриста и IT-поддержку.</p>'
+  }
+};
 
-document.querySelectorAll('.domain-card').forEach(c => observer.observe(c));
+let currentDomain = 'earth';
+let currentImgIdx = 0;
 
-// ══ GALLERY THUMBNAIL CLICKS ══
-document.querySelectorAll('.domain-thumbs img').forEach(thumb => {
-  thumb.addEventListener('click', function() {
-    const gallery = this.closest('.domain-gallery');
-    const mainImg = gallery.querySelector('.domain-main-img');
-    if (mainImg) {
-      mainImg.src = this.src;
-      gallery.querySelectorAll('.domain-thumbs img').forEach(t => t.classList.remove('active'));
-      this.classList.add('active');
-    }
+function renderDomain(key) {
+  const d = DOMAINS[key];
+  currentDomain = key;
+  currentImgIdx = 0;
+  document.getElementById('dv-icon').textContent = d.icon;
+  document.getElementById('dv-title').textContent = d.title;
+  document.getElementById('dv-desc').innerHTML = d.html;
+  updateDvImage();
+  renderDvDots();
+  document.querySelectorAll('.domain-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.key === key);
   });
+}
+
+function updateDvImage() {
+  const d = DOMAINS[currentDomain];
+  const img = document.getElementById('dv-img');
+  img.style.opacity = '0';
+  setTimeout(() => {
+    img.src = d.images[currentImgIdx];
+    img.alt = d.title;
+    img.style.opacity = '1';
+  }, 150);
+  document.querySelectorAll('.img-dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === currentImgIdx);
+  });
+  const many = d.images.length > 1;
+  document.getElementById('img-prev').style.display = many ? 'flex' : 'none';
+  document.getElementById('img-next').style.display = many ? 'flex' : 'none';
+}
+
+function renderDvDots() {
+  const d = DOMAINS[currentDomain];
+  const el = document.getElementById('img-dots');
+  el.innerHTML = d.images.map((_, i) =>
+    `<span class="img-dot${i === 0 ? ' active' : ''}" data-i="${i}"></span>`
+  ).join('');
+  el.querySelectorAll('.img-dot').forEach(dot => {
+    dot.addEventListener('click', () => {
+      currentImgIdx = +dot.dataset.i;
+      updateDvImage();
+    });
+  });
+}
+
+document.getElementById('img-prev').addEventListener('click', () => {
+  const len = DOMAINS[currentDomain].images.length;
+  currentImgIdx = (currentImgIdx - 1 + len) % len;
+  updateDvImage();
 });
+document.getElementById('img-next').addEventListener('click', () => {
+  const len = DOMAINS[currentDomain].images.length;
+  currentImgIdx = (currentImgIdx + 1) % len;
+  updateDvImage();
+});
+document.querySelectorAll('.domain-btn').forEach(btn => {
+  btn.addEventListener('click', () => renderDomain(btn.dataset.key));
+});
+
+renderDomain('earth');
 </script>
 
 
