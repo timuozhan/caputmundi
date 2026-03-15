@@ -267,19 +267,24 @@ body {
   font-size: 3rem;
 }
 
-/* ═══ ARTIFACT SECTION ═══ */
+/* ═══ MODEL SECTION ═══ */
 #model-section {
   padding: 4rem 2rem 6rem;
   background: var(--milk);
 }
 #model-section .section-title { margin-bottom: 0.5rem; }
-#artifact-mount {
+#model-iframe-wrap {
   max-width: 1200px;
   margin: 0 auto;
   border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-  background: #f5f4f0;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+}
+#model-iframe-wrap iframe {
+  width: 100%;
+  height: 900px;
+  border: none;
+  display: block;
 }
 
 /* ═══ FOOTER ═══ */
@@ -518,7 +523,9 @@ footer {
   <section id="model-section">
     <h2 class="section-title">Финансовая модель</h2>
     <p class="section-subtitle">Интерактивная модель поселения — настраивайте параметры и анализируйте экономику каждого домена</p>
-    <div id="artifact-mount"></div>
+    <div id="model-iframe-wrap">
+      <iframe src="https://uozhan-model.vercel.app/" title="Финансовая модель Уожан" loading="lazy"></iframe>
+    </div>
   </section>
 
   <footer>
@@ -587,31 +594,6 @@ document.querySelectorAll('.domain-thumbs img').forEach(thumb => {
 });
 </script>
 
-<!-- REACT for Artifact -->
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<script>
-  // Load and compile artifact
-  fetch('artifact.jsx')
-    .then(r => r.text())
-    .then(code => {
-      const compiled = Babel.transform(code, { presets: ['react'] }).code;
-      const script = document.createElement('script');
-      script.textContent = compiled;
-      document.body.appendChild(script);
-      // Mount
-      const mount = document.getElementById('artifact-mount');
-      if (mount && window.SettlementModel) {
-        ReactDOM.createRoot(mount).render(React.createElement(window.SettlementModel));
-      }
-    })
-    .catch(err => {
-      console.error('Artifact load error:', err);
-      document.getElementById('artifact-mount').innerHTML =
-        '<div style="padding:3rem;text-align:center;color:#7a7062">Финансовая модель загружается при размещении на сервере</div>';
-    });
-</script>
 
 </body>
 </html>
