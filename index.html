@@ -319,6 +319,17 @@ body {
 .img-prev { left: 2rem; }
 .img-next { right: 1.5rem; }
 
+#dv-overlay {
+  position: absolute;
+  inset: 2rem 1.5rem 2rem 2rem;
+  border-radius: 16px;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  z-index: 3;
+}
+
 .img-dots {
   position: absolute;
   bottom: 3.2rem;
@@ -497,6 +508,7 @@ footer {
     <div class="domain-view">
       <div class="dv-img-wrap">
         <img id="dv-img" src="" alt="">
+        <div id="dv-overlay"></div>
         <button class="img-arrow img-prev" id="img-prev">
           <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
@@ -534,6 +546,7 @@ function checkPassword() {
     document.getElementById('password-screen').classList.add('hidden');
     document.getElementById('site').classList.add('visible');
     sessionStorage.setItem('auth', '1');
+    preloadAllDomainImages();
     setTimeout(() => {
       document.getElementById('password-screen').style.display = 'none';
     }, 700);
@@ -555,10 +568,20 @@ pwInput.addEventListener('keydown', e => {
   if (e.key === 'Enter' && pwInput.value.length === PW_LEN) checkPassword();
 });
 
+// Preload hero image while user is on password screen
+(new Image()).src = 'images/opt/Main_comp_1OP.png';
+
+function preloadAllDomainImages() {
+  Object.values(DOMAINS).forEach(d => {
+    d.images.forEach(src => { (new Image()).src = src; });
+  });
+}
+
 // Auto-auth for session
 if (sessionStorage.getItem('auth') === '1') {
   document.getElementById('password-screen').style.display = 'none';
   document.getElementById('site').classList.add('visible');
+  preloadAllDomainImages();
 }
 
 // ══ PARALLAX ══
@@ -665,14 +688,16 @@ function renderDomain(key) {
 function updateDvImage() {
   const d = DOMAINS[currentDomain];
   const img = document.getElementById('dv-img');
-  img.style.transition = 'opacity 0.5s ease';
-  img.style.opacity = '0';
+  const overlay = document.getElementById('dv-overlay');
+  // fade to black
+  overlay.style.opacity = '1';
   setTimeout(() => {
     img.src = d.images[currentImgIdx];
     img.alt = d.title;
-    img.onload = () => { img.style.opacity = '1'; };
-    if (img.complete) img.style.opacity = '1';
-  }, 500);
+    const reveal = () => { overlay.style.opacity = '0'; };
+    img.onload = reveal;
+    if (img.complete) reveal();
+  }, 400);
   document.querySelectorAll('.img-dot').forEach((dot, i) => {
     dot.classList.toggle('active', i === currentImgIdx);
   });
@@ -704,7 +729,7 @@ function startAutoSlide() {
   autoSlideTimer = setInterval(() => {
     currentImgIdx = (currentImgIdx + 1) % d.images.length;
     updateDvImage();
-  }, 5000);
+  }, 7000);
 }
 
 function stopAutoSlide() {
