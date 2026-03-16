@@ -659,6 +659,7 @@ function renderDomain(key) {
   document.querySelectorAll('.domain-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.key === key);
   });
+  startAutoSlide();
 }
 
 function updateDvImage() {
@@ -695,15 +696,33 @@ function renderDvDots() {
   });
 }
 
+let autoSlideTimer = null;
+
+function startAutoSlide() {
+  stopAutoSlide();
+  const d = DOMAINS[currentDomain];
+  if (d.images.length < 2) return;
+  autoSlideTimer = setInterval(() => {
+    currentImgIdx = (currentImgIdx + 1) % d.images.length;
+    updateDvImage();
+  }, 3000);
+}
+
+function stopAutoSlide() {
+  if (autoSlideTimer) { clearInterval(autoSlideTimer); autoSlideTimer = null; }
+}
+
 document.getElementById('img-prev').addEventListener('click', () => {
   const len = DOMAINS[currentDomain].images.length;
   currentImgIdx = (currentImgIdx - 1 + len) % len;
   updateDvImage();
+  startAutoSlide();
 });
 document.getElementById('img-next').addEventListener('click', () => {
   const len = DOMAINS[currentDomain].images.length;
   currentImgIdx = (currentImgIdx + 1) % len;
   updateDvImage();
+  startAutoSlide();
 });
 document.querySelectorAll('.domain-btn').forEach(btn => {
   btn.addEventListener('click', () => renderDomain(btn.dataset.key));
