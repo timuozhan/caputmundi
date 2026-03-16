@@ -689,21 +689,27 @@ function updateDvImage() {
   const d = DOMAINS[currentDomain];
   const img = document.getElementById('dv-img');
   const overlay = document.getElementById('dv-overlay');
-  // fade to black
-  overlay.style.opacity = '1';
-  setTimeout(() => {
-    img.src = d.images[currentImgIdx];
-    img.alt = d.title;
-    const reveal = () => { overlay.style.opacity = '0'; };
-    img.onload = reveal;
-    if (img.complete) reveal();
-  }, 400);
+  const src = d.images[currentImgIdx];
+
+  // dots & arrows
   document.querySelectorAll('.img-dot').forEach((dot, i) => {
     dot.classList.toggle('active', i === currentImgIdx);
   });
   const many = d.images.length > 1;
   document.getElementById('img-prev').style.display = many ? 'flex' : 'none';
   document.getElementById('img-next').style.display = many ? 'flex' : 'none';
+
+  // fade to black, then swap image, then reveal
+  overlay.style.opacity = '1';
+  const loader = new Image();
+  loader.onload = loader.onerror = () => {
+    img.src = src;
+    img.alt = d.title;
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      overlay.style.opacity = '0';
+    }));
+  };
+  loader.src = src;
 }
 
 function renderDvDots() {
