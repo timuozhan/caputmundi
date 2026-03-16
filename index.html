@@ -664,15 +664,14 @@ function renderDomain(key) {
 function updateDvImage() {
   const d = DOMAINS[currentDomain];
   const img = document.getElementById('dv-img');
-  img.style.transition = 'opacity 0.35s ease';
+  img.style.transition = 'opacity 0.5s ease';
   img.style.opacity = '0';
   setTimeout(() => {
     img.src = d.images[currentImgIdx];
     img.alt = d.title;
     img.onload = () => { img.style.opacity = '1'; };
-    // fallback if already cached
     if (img.complete) img.style.opacity = '1';
-  }, 200);
+  }, 500);
   document.querySelectorAll('.img-dot').forEach((dot, i) => {
     dot.classList.toggle('active', i === currentImgIdx);
   });
@@ -704,7 +703,7 @@ function startAutoSlide() {
   autoSlideTimer = setInterval(() => {
     currentImgIdx = (currentImgIdx + 1) % d.images.length;
     updateDvImage();
-  }, 3000);
+  }, 5000);
 }
 
 function stopAutoSlide() {
