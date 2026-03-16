@@ -651,7 +651,6 @@ function renderDomain(key) {
   const d = DOMAINS[key];
   currentDomain = key;
   currentImgIdx = 0;
-  document.getElementById('dv-icon').textContent = d.icon;
   document.getElementById('dv-title').textContent = d.title;
   document.getElementById('dv-desc').innerHTML = d.html;
   updateDvImage();
