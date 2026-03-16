@@ -546,7 +546,7 @@ function checkPassword() {
     document.getElementById('password-screen').classList.add('hidden');
     document.getElementById('site').classList.add('visible');
     sessionStorage.setItem('auth', '1');
-    preloadAllDomainImages();
+    setTimeout(preloadAllDomainImages, 100);
     setTimeout(() => {
       document.getElementById('password-screen').style.display = 'none';
     }, 700);
@@ -571,17 +571,10 @@ pwInput.addEventListener('keydown', e => {
 // Preload hero image while user is on password screen
 (new Image()).src = 'images/opt/Main_comp_1OP.png';
 
-function preloadAllDomainImages() {
-  Object.values(DOMAINS).forEach(d => {
-    d.images.forEach(src => { (new Image()).src = src; });
-  });
-}
-
-// Auto-auth for session
+// Auto-auth for session (preload runs after DOMAINS defined, see bottom)
 if (sessionStorage.getItem('auth') === '1') {
   document.getElementById('password-screen').style.display = 'none';
   document.getElementById('site').classList.add('visible');
-  preloadAllDomainImages();
 }
 
 // ══ PARALLAX ══
@@ -685,6 +678,8 @@ function renderDomain(key) {
   startAutoSlide();
 }
 
+let imgRequestId = 0;
+
 function updateDvImage() {
   const d = DOMAINS[currentDomain];
   const img = document.getElementById('dv-img');
@@ -699,13 +694,18 @@ function updateDvImage() {
   document.getElementById('img-prev').style.display = many ? 'flex' : 'none';
   document.getElementById('img-next').style.display = many ? 'flex' : 'none';
 
-  // fade to black, then swap image, then reveal
+  // cancel any previous pending load
+  imgRequestId++;
+  const myId = imgRequestId;
+
   overlay.style.opacity = '1';
   const loader = new Image();
   loader.onload = loader.onerror = () => {
+    if (myId !== imgRequestId) return; // stale — newer request in flight
     img.src = src;
     img.alt = d.title;
     requestAnimationFrame(() => requestAnimationFrame(() => {
+      if (myId !== imgRequestId) return;
       overlay.style.opacity = '0';
     }));
   };
@@ -759,6 +759,18 @@ document.querySelectorAll('.domain-btn').forEach(btn => {
 });
 
 renderDomain('farm');
+
+// Preload all domain images after DOMAINS is defined
+function preloadAllDomainImages() {
+  Object.values(DOMAINS).forEach(d => {
+    d.images.forEach(src => { (new Image()).src = src; });
+  });
+}
+
+// Run preload on login or on return visit
+if (sessionStorage.getItem('auth') === '1') {
+  preloadAllDomainImages();
+}
 </script>
 
 
