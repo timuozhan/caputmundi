@@ -458,6 +458,81 @@ body {
   display: block;
 }
 
+/* ═══ MAP STATS SECTION ═══ */
+#map-section {
+  padding: 4rem 4vw;
+  background: var(--milk);
+}
+.map-parallax-wrap {
+  position: relative;
+  aspect-ratio: 21/9;
+  overflow: hidden;
+  border-radius: 20px;
+  max-width: 100%;
+}
+.map-bg {
+  position: absolute;
+  inset: -15% 0;
+  background-image: url('images/map/map.webp');
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+}
+.map-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0,0,0,0.62) 0%,
+    rgba(0,0,0,0.35) 45%,
+    rgba(0,0,0,0.0) 100%
+  );
+}
+.map-stats {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 5%;
+  gap: 2.5rem;
+}
+.map-stat {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.map-stat.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.map-stat:nth-child(2) { transition-delay: 0.2s; }
+.map-stat-num {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 8vw, 9rem);
+  font-weight: 200;
+  color: #fff;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+.map-stat-num span {
+  font-size: 0.38em;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  vertical-align: 0.1em;
+  margin-left: 0.15em;
+}
+.map-stat-desc {
+  font-family: var(--font-body);
+  font-size: clamp(0.75rem, 1.6vw, 1.1rem);
+  color: rgba(255,255,255,0.7);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  margin-top: 0.35rem;
+  max-width: 28ch;
+  line-height: 1.5;
+}
+
 /* ═══ FOOTER ═══ */
 footer {
   position: relative;
@@ -536,6 +611,24 @@ footer {
     </div>
     <div class="hero-scroll-hint">
       <span>↓</span>
+    </div>
+  </section>
+
+  <!-- MAP STATS -->
+  <section id="map-section">
+    <div class="map-parallax-wrap">
+      <div class="map-bg" id="map-bg"></div>
+      <div class="map-overlay"></div>
+      <div class="map-stats">
+        <div class="map-stat" id="map-stat-1">
+          <div class="map-stat-num">140<span>Га</span></div>
+          <div class="map-stat-desc">осваиваемых земельных участков</div>
+        </div>
+        <div class="map-stat" id="map-stat-2">
+          <div class="map-stat-num">700<span>Га</span></div>
+          <div class="map-stat-desc">общей территории долины</div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -649,9 +742,20 @@ if (sessionStorage.getItem('auth') === '1') {
 // ══ PARALLAX ══
 window.addEventListener('scroll', () => {
   const scrollY = window.scrollY;
+
+  // Hero parallax
   const bg = document.getElementById('hero-bg');
   if (bg) bg.style.transform = `translateY(${scrollY * 0.4}px)`;
 
+  // Map parallax
+  const mapBg = document.getElementById('map-bg');
+  if (mapBg) {
+    const rect = mapBg.parentElement.getBoundingClientRect();
+    const offset = (rect.top + rect.height / 2 - window.innerHeight / 2) * 0.2;
+    mapBg.style.transform = `translateY(${offset}px)`;
+  }
+
+  // Footer parallax
   const footerBg = document.getElementById('footer-bg');
   if (footerBg) {
     const rect = footerBg.parentElement.getBoundingClientRect();
@@ -659,6 +763,17 @@ window.addEventListener('scroll', () => {
     footerBg.style.transform = `translateY(${offset}px)`;
   }
 });
+
+// Map stats fade-in on scroll
+const mapObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      mapObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('.map-stat').forEach(el => mapObserver.observe(el));
 
 // ══ DOMAIN VIEWER ══
 const DOMAINS = {
