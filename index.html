@@ -381,11 +381,70 @@ body {
 }
 
 /* ═══ MODEL SECTION ═══ */
-#model-section {
-  padding: 4rem 2rem 6rem;
+/* ═══ VIDEO ═══ */
+#video-section {
+  padding: 4rem 2rem 5rem;
   background: var(--milk);
 }
-#model-section .section-title { margin-bottom: 0.5rem; }
+.video-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.12);
+  aspect-ratio: 16/9;
+}
+.video-wrap iframe {
+  width: 100%; height: 100%;
+  border: none; display: block;
+}
+
+/* ═══ MODEL (collapsible) ═══ */
+#model-section {
+  padding: 0 2rem 4rem;
+  background: var(--milk);
+}
+.model-toggle {
+  max-width: 1200px;
+  margin: 0 auto 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  user-select: none;
+}
+.model-toggle h2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
+  font-weight: 300;
+  color: var(--emerald-dark);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+.model-toggle-icon {
+  width: 32px; height: 32px;
+  border: 1px solid rgba(26,107,74,0.3);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--emerald);
+  font-size: 1rem;
+  transition: transform 0.35s ease, background 0.2s;
+  flex-shrink: 0;
+}
+.model-toggle:hover .model-toggle-icon {
+  background: rgba(26,107,74,0.08);
+}
+.model-toggle.open .model-toggle-icon {
+  transform: rotate(180deg);
+}
+.model-collapsible {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+}
+.model-collapsible.open {
+  max-height: 1000px;
+}
 #model-iframe-wrap {
   max-width: 1200px;
   margin: 0 auto;
@@ -481,12 +540,23 @@ footer {
     </div>
   </section>
 
+  <!-- VIDEO -->
+  <section id="video-section">
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/KQj1t5nr85g?rel=0&modestbranding=1&color=white" title="Уожан" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+    </div>
+  </section>
+
   <!-- INTERACTIVE MODEL -->
   <section id="model-section">
-    <h2 class="section-title">Финансовая и организационная модель</h2>
-    <p class="section-subtitle">Интерактивная модель поселения — настраивайте параметры и анализируйте экономику каждого домена</p>
-    <div id="model-iframe-wrap">
-      <iframe src="https://uozhan-model.vercel.app/" title="Финансовая модель Уожан" loading="lazy"></iframe>
+    <div class="model-toggle" id="model-toggle">
+      <h2>Финансовая и организационная модель</h2>
+      <span class="model-toggle-icon">▾</span>
+    </div>
+    <div class="model-collapsible" id="model-collapsible">
+      <div id="model-iframe-wrap">
+        <iframe src="" data-src="https://uozhan-model.vercel.app/" title="Финансовая модель Уожан"></iframe>
+      </div>
     </div>
   </section>
 
@@ -759,6 +829,19 @@ document.querySelectorAll('.domain-btn').forEach(btn => {
 });
 
 renderDomain('farm');
+
+// ══ MODEL TOGGLE ══
+const modelToggle = document.getElementById('model-toggle');
+const modelCollapsible = document.getElementById('model-collapsible');
+const modelIframe = modelCollapsible.querySelector('iframe');
+
+modelToggle.addEventListener('click', () => {
+  const isOpen = modelCollapsible.classList.toggle('open');
+  modelToggle.classList.toggle('open', isOpen);
+  if (isOpen && !modelIframe.src) {
+    modelIframe.src = modelIframe.dataset.src;
+  }
+});
 
 // Preload all domain images after DOMAINS is defined
 function preloadAllDomainImages() {
