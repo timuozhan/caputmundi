@@ -472,7 +472,7 @@ body {
 }
 .map-bg {
   position: absolute;
-  inset: -15% 0;
+  inset: -40% 0;
   background-image: url('images/map/map.webp');
   background-size: cover;
   background-position: center;
@@ -483,8 +483,8 @@ body {
   inset: 0;
   background: linear-gradient(
     to right,
-    rgba(0,0,0,0.62) 0%,
-    rgba(0,0,0,0.35) 45%,
+    rgba(0,0,0,0.15) 0%,
+    rgba(0,0,0,0.07) 45%,
     rgba(0,0,0,0.0) 100%
   );
 }
@@ -747,12 +747,14 @@ window.addEventListener('scroll', () => {
   const bg = document.getElementById('hero-bg');
   if (bg) bg.style.transform = `translateY(${scrollY * 0.4}px)`;
 
-  // Map parallax
+  // Map parallax (clamped so image never shows edges)
   const mapBg = document.getElementById('map-bg');
   if (mapBg) {
     const rect = mapBg.parentElement.getBoundingClientRect();
-    const offset = (rect.top + rect.height / 2 - window.innerHeight / 2) * 0.2;
-    mapBg.style.transform = `translateY(${offset}px)`;
+    const raw = (rect.top + rect.height / 2 - window.innerHeight / 2) * 0.18;
+    const limit = rect.height * 0.35; // stay within the 40% inset buffer
+    const clamped = Math.max(-limit, Math.min(limit, raw));
+    mapBg.style.transform = `translateY(${clamped}px)`;
   }
 
   // Footer parallax
