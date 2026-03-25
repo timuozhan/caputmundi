@@ -572,6 +572,34 @@ footer {
   text-transform: uppercase;
 }
 
+/* ═══ ARTIFACT PANEL ═══ */
+#artifact-panel {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 1.1s cubic-bezier(0.4,0,0.2,1), opacity 0.6s ease;
+}
+#artifact-panel.open {
+  opacity: 1;
+}
+
+#artifact-btn {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.25);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  padding: 0.3rem 0;
+  margin-top: 1rem;
+  transition: color 0.3s;
+  display: block;
+}
+#artifact-btn:hover {
+  color: rgba(255,255,255,0.55);
+}
+
 /* ═══ RESPONSIVE ═══ */
 @media (max-width: 768px) {
   .domain-view {
@@ -639,59 +667,65 @@ footer {
     </div>
   </section>
 
-  <!-- INTERACTIVE MODEL -->
-  <section id="model-section">
-    <div class="model-toggle" id="model-toggle">
-      <h2>Финансовая и организационная модель</h2>
-      <span class="model-toggle-icon">▾</span>
-    </div>
-    <div class="model-collapsible" id="model-collapsible">
-      <div id="model-iframe-wrap">
-        <iframe src="" data-src="https://uozhan-model.vercel.app/" title="Финансовая модель Уожан"></iframe>
-      </div>
-    </div>
-  </section>
+  <!-- ARTIFACT PANEL (hidden by default) -->
+  <div id="artifact-panel">
 
-  <!-- DOMAINS -->
-  <section id="domains">
-
-    <div class="domain-selector-wrap">
-      <div class="domain-selector">
-        <button class="domain-btn active" data-key="farm">Ферма</button>
-        <button class="domain-btn" data-key="selo">Село</button>
-        <button class="domain-btn" data-key="sanatorium">Санаторий</button>
-        <button class="domain-btn" data-key="villas">Виллы</button>
-        <button class="domain-btn" data-key="engineering">Инженерия</button>
-        <button class="domain-btn" data-key="security">СБ</button>
-        <button class="domain-btn" data-key="earth">Земля</button>
+    <!-- INTERACTIVE MODEL -->
+    <section id="model-section">
+      <div class="model-toggle" id="model-toggle">
+        <h2>Финансовая и организационная модель</h2>
+        <span class="model-toggle-icon">▾</span>
       </div>
-    </div>
-
-    <div class="domain-view">
-      <div class="dv-img-wrap">
-        <img id="dv-img" src="" alt="">
-        <div id="dv-overlay"></div>
-        <button class="img-arrow img-prev" id="img-prev">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-        </button>
-        <button class="img-arrow img-next" id="img-next">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-        <div class="img-dots" id="img-dots"></div>
+      <div class="model-collapsible" id="model-collapsible">
+        <div id="model-iframe-wrap">
+          <iframe src="" data-src="https://uozhan-model.vercel.app/" title="Финансовая модель Уожан"></iframe>
+        </div>
       </div>
-      <div class="dv-text">
-        <h3 id="dv-title"></h3>
-        <div id="dv-desc"></div>
-      </div>
-    </div>
+    </section>
 
-  </section>
+    <!-- DOMAINS -->
+    <section id="domains">
+
+      <div class="domain-selector-wrap">
+        <div class="domain-selector">
+          <button class="domain-btn active" data-key="farm">Ферма</button>
+          <button class="domain-btn" data-key="selo">Село</button>
+          <button class="domain-btn" data-key="sanatorium">Санаторий</button>
+          <button class="domain-btn" data-key="villas">Виллы</button>
+          <button class="domain-btn" data-key="engineering">Инженерия</button>
+          <button class="domain-btn" data-key="security">СБ</button>
+          <button class="domain-btn" data-key="earth">Земля</button>
+        </div>
+      </div>
+
+      <div class="domain-view">
+        <div class="dv-img-wrap">
+          <img id="dv-img" src="" alt="">
+          <div id="dv-overlay"></div>
+          <button class="img-arrow img-prev" id="img-prev">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+          </button>
+          <button class="img-arrow img-next" id="img-next">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+          <div class="img-dots" id="img-dots"></div>
+        </div>
+        <div class="dv-text">
+          <h3 id="dv-title"></h3>
+          <div id="dv-desc"></div>
+        </div>
+      </div>
+
+    </section>
+
+  </div><!-- /artifact-panel -->
 
   <footer>
     <div class="footer-bg" id="footer-bg"></div>
     <div class="footer-content">
       <span class="footer-title">Уожан 2030</span>
       <span class="footer-sub">© Caput Mundi</span>
+      <button id="artifact-btn" onclick="toggleArtifact()">артефакт</button>
     </div>
   </footer>
 
@@ -945,6 +979,34 @@ document.querySelectorAll('.domain-btn').forEach(btn => {
 });
 
 renderDomain('farm');
+
+// ══ ARTIFACT PANEL TOGGLE ══
+function toggleArtifact() {
+  const panel = document.getElementById('artifact-panel');
+  const btn = document.getElementById('artifact-btn');
+  const isOpen = panel.classList.contains('open');
+
+  if (isOpen) {
+    panel.style.maxHeight = panel.scrollHeight + 'px';
+    requestAnimationFrame(() => {
+      panel.style.maxHeight = '0';
+      panel.classList.remove('open');
+      btn.textContent = 'артефакт';
+    });
+  } else {
+    panel.classList.add('open');
+    panel.style.maxHeight = panel.scrollHeight + 'px';
+    btn.textContent = 'свернуть';
+    // после завершения анимации убираем фиксированный max-height
+    panel.addEventListener('transitionend', () => {
+      if (panel.classList.contains('open')) panel.style.maxHeight = 'none';
+    }, { once: true });
+    // скроллим вверх к модели
+    setTimeout(() => {
+      document.getElementById('model-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  }
+}
 
 // ══ MODEL TOGGLE ══
 const modelToggle = document.getElementById('model-toggle');
