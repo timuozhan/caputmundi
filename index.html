@@ -574,18 +574,21 @@ footer {
 
 /* ═══ PHOTO GALLERY SECTION ═══ */
 #photo-gallery-section {
-  padding: 4rem 4vw;
   background: var(--milk);
+  padding: 4rem 0;
+}
+.pg-inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 5vw;
   align-items: center;
   max-width: 1400px;
   margin: 0 auto;
+  padding: 0 4vw;
 }
 .pg-window {
   position: relative;
-  aspect-ratio: 4/3;
+  aspect-ratio: 1 / 1;
   border-radius: 20px;
   overflow: hidden;
   background: #111;
@@ -596,6 +599,7 @@ footer {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
 }
 .pg-overlay {
@@ -603,11 +607,27 @@ footer {
   inset: 0;
   background: #000;
   opacity: 0;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.6s ease;
   pointer-events: none;
-  border-radius: 20px;
   z-index: 2;
 }
+.pg-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: rgba(255,255,255,0.35);
+  font-size: 1.6rem;
+  padding: 0.5rem 0.8rem;
+  transition: color 0.2s;
+  line-height: 1;
+}
+.pg-arrow:hover { color: rgba(255,255,255,0.75); }
+.pg-arrow-prev { left: 0.4rem; }
+.pg-arrow-next { right: 0.4rem; }
 .pg-text {
   display: flex;
   flex-direction: column;
@@ -716,12 +736,16 @@ footer {
 
   <!-- PHOTO GALLERY -->
   <section id="photo-gallery-section">
-    <div class="pg-window">
-      <img class="pg-img" id="pg-img" src="images/photogallery/IMG_0186.webp" alt="Уожан">
-      <div class="pg-overlay" id="pg-overlay"></div>
-    </div>
-    <div class="pg-text">
-      <h2>Уожан —<br><em>всегда красиво</em></h2>
+    <div class="pg-inner">
+      <div class="pg-window">
+        <img class="pg-img" id="pg-img" src="images/photogallery/IMG_0186.webp" alt="Уожан">
+        <div class="pg-overlay" id="pg-overlay"></div>
+        <button class="pg-arrow pg-arrow-prev" id="pg-prev">&#8592;</button>
+        <button class="pg-arrow pg-arrow-next" id="pg-next">&#8594;</button>
+      </div>
+      <div class="pg-text">
+        <h2>Уожан —<br><em>всегда красиво</em></h2>
+      </div>
     </div>
   </section>
 
@@ -1119,7 +1143,21 @@ function pgSwitchTo(idx) {
   loader.src = PG_IMAGES[idx];
 }
 
-setInterval(() => pgSwitchTo(pgNextRandom()), 5000);
+let pgAutoTimer = setInterval(() => pgSwitchTo(pgNextRandom()), 7500);
+
+function pgRestart() {
+  clearInterval(pgAutoTimer);
+  pgAutoTimer = setInterval(() => pgSwitchTo(pgNextRandom()), 7500);
+}
+
+document.getElementById('pg-prev').addEventListener('click', () => {
+  pgSwitchTo((pgCurrentIdx - 1 + PG_IMAGES.length) % PG_IMAGES.length);
+  pgRestart();
+});
+document.getElementById('pg-next').addEventListener('click', () => {
+  pgSwitchTo(pgNextRandom());
+  pgRestart();
+});
 
 // ══ ARTIFACT PANEL TOGGLE ══
 function toggleArtifact() {
